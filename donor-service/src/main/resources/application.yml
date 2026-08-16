@@ -1,19 +1,19 @@
-server:
-  port: 8082
+﻿server:
+  port: 8081
 
 spring:
   application:
     name: donor-service
-  data:
-    mongodb:
-      uri: ${MONGO_URI:mongodb://localhost:27017/donor_db}
+  datasource:
+    url: jdbc:postgresql://localhost:5432/donor_service
+    username: postgres
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
 api:
-  security:
-    key: ${API_KEY:my-secret-api-key-12345}
-
-springdoc:
-  api-docs:
-    path: /api-docs
-  swagger-ui:
-    path: /swagger-ui.html
+  key: "super-secret-api-key-donor-service"
