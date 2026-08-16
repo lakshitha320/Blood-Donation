@@ -166,24 +166,39 @@ export default function RequestMatching({ requests, setRequests, donors, onShowT
           </h4>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
-            {matchingResults.map(d => (
-              <div key={d.id} style={{ background: 'var(--bg-surface)', padding: '1rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                  <span style={{ fontWeight: 700 }}>{d.name}</span>
-                  <span className="stock-status-tag status-healthy">{d.bloodType}</span>
+            {matchingResults.map(d => {
+              const isSameCity = d.city && activeRequestForMatch.city && d.city.toLowerCase() === activeRequestForMatch.city.toLowerCase();
+              return (
+                <div key={d.id} style={{ background: 'var(--bg-surface)', padding: '1.2rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', position: 'relative' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.6rem' }}>
+                    <div>
+                      <span style={{ fontWeight: 800, fontSize: '1rem', color: 'var(--text-main)' }}>{d.name}</span>
+                      <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '0.1rem' }}>City: {d.city} | Phone: {d.phone}</div>
+                    </div>
+                    <span className="stock-status-tag status-healthy" style={{ fontWeight: 900 }}>{d.bloodType}</span>
+                  </div>
+
+                  <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
+                    <span style={{ fontSize: '0.7rem', padding: '0.2rem 0.55rem', borderRadius: 'var(--radius-full)', background: 'rgba(16,185,129,0.15)', color: 'var(--color-accent-emerald)', border: '1px solid rgba(16,185,129,0.3)', fontWeight: 700 }}>
+                      ✓ Compatible
+                    </span>
+                    {isSameCity && (
+                      <span style={{ fontSize: '0.7rem', padding: '0.2rem 0.55rem', borderRadius: 'var(--radius-full)', background: 'rgba(59,130,246,0.15)', color: 'var(--color-accent-blue)', border: '1px solid rgba(59,130,246,0.3)', fontWeight: 700 }}>
+                        📍 Same City ({d.city})
+                      </span>
+                    )}
+                  </div>
+
+                  <button 
+                    className="btn btn-secondary" 
+                    style={{ width: '100%', justifyContent: 'center', fontSize: '0.82rem' }}
+                    onClick={() => onShowToast(`[Notification Service] Dispatched SMS alert to donor ${d.name} (${d.phone})`)}
+                  >
+                    Send Urgent Dispatch SMS
+                  </button>
                 </div>
-                <div style={{ fontSize: '0.82rem', color: 'var(--text-dim)', marginBottom: '0.8rem' }}>
-                  City: {d.city} | Phone: {d.phone}
-                </div>
-                <button 
-                  className="btn btn-secondary" 
-                  style={{ width: '100%', justifyContent: 'center', fontSize: '0.8rem' }}
-                  onClick={() => onShowToast(`[Notification Service] Dispatched SMS alert to donor ${d.name} (${d.phone})`)}
-                >
-                  Send Urgent Dispatch SMS
-                </button>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
