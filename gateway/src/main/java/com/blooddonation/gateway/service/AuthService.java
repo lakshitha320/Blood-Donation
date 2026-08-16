@@ -6,56 +6,62 @@ import com.blooddonation.gateway.dto.RegisterRequest;
 import com.blooddonation.gateway.dto.UserProfileResponse;
 import com.blooddonation.gateway.model.User;
 import com.blooddonation.gateway.model.UserRole;
+import com.blooddonation.gateway.repository.UserRepository;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class AuthService {
 
-    private final Map<String, User> userMapByEmail = new ConcurrentHashMap<>();
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
-    public AuthService(PasswordEncoder passwordEncoder, JwtService jwtService) {
+    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
+        this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
-
-        // Seed Default Users for immediate testing
-        seedDefaultUsers();
     }
 
-    private void seedDefaultUsers() {
-        User donor = new User(
-            "USR-101",
-            "donor@blood.lk",
-            passwordEncoder.encode("password123"),
-            "Kasun Perera",
-            "O+",
-            "Colombo",
-            "+94 77 123 4567",
-            UserRole.DONOR
-        );
-        userMapByEmail.put(donor.getEmail(), donor);
+    @Bean
+    public CommandLineRunner seedDatabase() {
+        return args -> {
+            if (!userRepository.existsByEmail("donor@blood.lk")) {
+                User donor = new User(
+                    "USR-101",
+                    "donor@blood.lk",
+                    passwordEncoder.encode("password123"),
+                    "Kasun Perera",
+                    "O+",
+                    "Colombo",
+                    "+94 77 123 4567",
+                    UserRole.DONOR
+                );
+                userRepository.save(donor);
+            }
 
-        User hospital = new User(
-            "USR-102",
-            "hospital@colombo.lk",
-            passwordEncoder.encode("hospital123"),
-            "National Hospital Colombo",
-            "ALL",
-            "Colombo",
-            "+94 11 269 1111",
-            UserRole.HOSPITAL
-        );
-        userMapByEmail.put(hospital.getEmail(), hospital);
+            if (!userRepository.existsByEmail("hospital@colombo.lk")) {
+                User hospital = new User(
+                    "USR-102",
+                    "hospital@colombo.lk",
+                    passwordEncoder.encode("hospital123"),
+                    "National Hospital Colombo",
+                    "ALL",
+                    "Colombo",
+                    "+94 11 269 1111",
+                    UserRole.HOSPITAL
+                );
+                userRepository.save(hospital);
+            }
+        };
     }
 
     public AuthResponse register(RegisterRequest req) {
-        if (userMapByEmail.containsKey(req.getEmail())) {
+        if (userRepository.existsByEmail(req.getEmail())) {
             throw new IllegalArgumentException("User with email " + req.getEmail() + " already exists!");
         }
 
@@ -73,15 +79,17 @@ public class AuthService {
             req.getRole()
         );
 
-        userMapByEmail.put(newUser.getEmail(), newUser);
+        userRepository.save(newUser);
 
         String jwtToken = jwtService.generateToken(newUser.getId(), newUser.getEmail(), newUser.getRole());
         return new AuthResponse(jwtToken, newUser.getId(), newUser.getEmail(), newUser.getRole());
     }
 
     public AuthResponse login(LoginRequest req) {
-        User user = userMapByEmail.get(req.getEmail());
-        if (user == null || !passwordEncoder.matches(req.getPassword(), user.getPassword())) {
+        User user = userRepository.findByEmail(req.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid email or password!"));
+
+        if (!passwordEncoder.matches(req.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("Invalid email or password!");
         }
 
@@ -90,10 +98,8 @@ public class AuthService {
     }
 
     public UserProfileResponse getProfile(String email) {
-        User user = userMapByEmail.get(email);
-        if (user == null) {
-            throw new IllegalArgumentException("User not found!");
-        }
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("User not found!"));
         return new UserProfileResponse(user);
     }
 }

@@ -4,16 +4,10 @@
 spring:
   application:
     name: request-service
-  datasource:
-    url: jdbc:postgresql://localhost:5432/request_service
-    username: postgres
-    password: password
-  jpa:
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+  data:
+    mongodb:
+      uri: mongodb://mongodb:27017/request_service
 
 api:
   key: "super-secret-api-key-request-service"
+

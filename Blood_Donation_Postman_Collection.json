@@ -1,0 +1,252 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+		"name": "Blood Donation System Microservices",
+		"description": "Postman Collection for Blood Donation Microservices Architecture",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Gateway - Auth Service",
+			"item": [
+				{
+					"name": "Register User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"newdonor@blood.lk\",\n  \"password\": \"password123\",\n  \"fullName\": \"Nimal Silva\",\n  \"bloodGroup\": \"A+\",\n  \"city\": \"Kandy\",\n  \"phone\": \"+94 71 987 6543\",\n  \"role\": \"DONOR\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/auth/register",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["auth", "register"]
+						}
+					}
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"donor@blood.lk\",\n  \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/auth/login",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "Get User Profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/auth/profile",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["auth", "profile"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "2. Donor Service",
+			"item": [
+				{
+					"name": "Get All Donors",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-KEY",
+								"value": "super-secret-api-key-donor-service"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8081/donors",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8081",
+							"path": ["donors"]
+						}
+					}
+				},
+				{
+					"name": "Get Donation History",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-KEY",
+								"value": "super-secret-api-key-donor-service"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8081/donors/history",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8081",
+							"path": ["donors", "history"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "3. Blood Inventory Service",
+			"item": [
+				{
+					"name": "Get Inventory Stock",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-KEY",
+								"value": "super-secret-api-key-inventory-service"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8082/inventory",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8082",
+							"path": ["inventory"]
+						}
+					}
+				},
+				{
+					"name": "Get Stock by Blood Type",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-KEY",
+								"value": "super-secret-api-key-inventory-service"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8082/inventory/O+",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8082",
+							"path": ["inventory", "O+"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "4. Request & Matching Service",
+			"item": [
+				{
+					"name": "Get All Blood Requests",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-KEY",
+								"value": "super-secret-api-key-request-service"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8083/requests",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8083",
+							"path": ["requests"]
+						}
+					}
+				},
+				{
+					"name": "Match Donors for Request",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-KEY",
+								"value": "super-secret-api-key-request-service"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8083/requests/match",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8083",
+							"path": ["requests", "match"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "5. Notification Service",
+			"item": [
+				{
+					"name": "Send Email Alert",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-KEY",
+								"value": "super-secret-api-key-notification-service"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8084/notify/email",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8084",
+							"path": ["notify", "email"]
+						}
+					}
+				},
+				{
+					"name": "Send SMS Alert",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-KEY",
+								"value": "super-secret-api-key-notification-service"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8084/notify/sms",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8084",
+							"path": ["notify", "sms"]
+						}
+					}
+				}
+			]
+		}
+	]
+}

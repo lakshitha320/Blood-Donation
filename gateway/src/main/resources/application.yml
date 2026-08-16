@@ -1,4 +1,4 @@
-server:
+﻿server:
   port: 8080
 
 spring:
@@ -25,3 +25,4 @@ gateway:
     api-key-secret: blood_donation_secret_key_2026
   rate-limit:
     requests-per-minute: 60
+
