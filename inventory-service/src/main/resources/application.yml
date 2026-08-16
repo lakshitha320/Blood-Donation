@@ -6,12 +6,7 @@ spring:
     name: inventory-service
   data:
     mongodb:
-      uri: mongodb://mongodb:27017/inventory_service
+      uri: mongodb://localhost:27017/inventory_service
 
 api:
   key: "super-secret-api-key-inventory-service"
-
-
-
-
-

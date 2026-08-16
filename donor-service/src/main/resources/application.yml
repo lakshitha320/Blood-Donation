@@ -6,12 +6,7 @@ spring:
     name: donor-service
   data:
     mongodb:
-      uri: mongodb://mongodb:27017/donor_service
+      uri: mongodb://localhost:27017/donor_service
 
 api:
   key: "super-secret-api-key-donor-service"
-
-
-
-
-

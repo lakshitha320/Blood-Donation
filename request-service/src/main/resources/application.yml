@@ -6,12 +6,7 @@ spring:
     name: request-service
   data:
     mongodb:
-      uri: mongodb://mongodb:27017/request_service
+      uri: mongodb://localhost:27017/request_service
 
 api:
   key: "super-secret-api-key-request-service"
-
-
-
-
-

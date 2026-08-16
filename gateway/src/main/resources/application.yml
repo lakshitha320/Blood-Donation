@@ -4,13 +4,14 @@
 spring:
   application:
     name: gateway-service
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/gateway_db
 
-# JWT OAuth 2.0 Configuration
 jwt:
   secret: BloodDonationSuperSecretKeyForJWTTokenGeneration2026!
-  expiration-ms: 86400000 # 24 Hours
+  expiration-ms: 86400000
 
-# OpenAPI / Swagger UI
 springdoc:
   api-docs:
     path: /v3/api-docs
@@ -18,20 +19,9 @@ springdoc:
     path: /swagger-ui.html
     operations-sorter: method
 
-# Security & Gateway Rate Limiting Configuration
 gateway:
   security:
     api-key-header: X-API-KEY
     api-key-secret: blood_donation_secret_key_2026
   rate-limit:
     requests-per-minute: 60
-
-
-spring:
-  data:
-    mongodb:
-      uri: mongodb://localhost:27017/gateway
-
-
-
-
