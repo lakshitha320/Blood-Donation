@@ -6,13 +6,17 @@ export default function AuthModal({ user, setUser, onClose, onShowToast }) {
   const [isRegisterMode, setIsRegisterMode] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [bloodGroup, setBloodGroup] = useState('O+');
+  const [city, setCity] = useState('');
+  const [phone, setPhone] = useState('');
   const [role, setRole] = useState('DONOR');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isRegisterMode) {
-      await apiAuth.register({ email, password, role });
-      onShowToast(`User ${email} registered via User & Auth Service (/auth/register)`);
+      await apiAuth.register({ email, password, fullName, bloodGroup, city, phone, role });
+      onShowToast(`User ${email} registered via Gateway (/auth/register)`);
       setIsRegisterMode(false);
     } else {
       const res = await apiAuth.login({ email, password });
@@ -87,14 +91,65 @@ export default function AuthModal({ user, setUser, onClose, onShowToast }) {
             </div>
 
             {isRegisterMode && (
-              <div className="form-group">
-                <label className="form-label">User Role</label>
-                <select className="form-select" value={role} onChange={(e) => setRole(e.target.value)}>
-                  <option value="DONOR">Donor</option>
-                  <option value="RECIPIENT">Recipient</option>
-                  <option value="HOSPITAL">Hospital Staff</option>
-                </select>
-              </div>
+              <>
+                <div className="form-group">
+                  <label className="form-label">Full Name</label>
+                  <input 
+                    type="text" 
+                    className="form-input"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    placeholder="e.g. Kasun Perera"
+                    required
+                  />
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                  <div className="form-group">
+                    <label className="form-label">Blood Group</label>
+                    <select className="form-select" value={bloodGroup} onChange={(e) => setBloodGroup(e.target.value)}>
+                      {['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'].map(bg => (
+                        <option key={bg} value={bg}>{bg}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label">City</label>
+                    <input 
+                      type="text" 
+                      className="form-input"
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
+                      placeholder="e.g. Colombo"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                  <div className="form-group">
+                    <label className="form-label">Phone Number</label>
+                    <input 
+                      type="tel" 
+                      className="form-input"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="+94 77 123 4567"
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label">User Role</label>
+                    <select className="form-select" value={role} onChange={(e) => setRole(e.target.value)}>
+                      <option value="DONOR">Donor</option>
+                      <option value="RECIPIENT">Recipient</option>
+                      <option value="HOSPITAL">Hospital Staff</option>
+                    </select>
+                  </div>
+                </div>
+              </>
             )}
 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1.5rem' }}>
