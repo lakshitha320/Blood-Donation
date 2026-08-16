@@ -1,4 +1,4 @@
-﻿# Java / Maven build output
+# Java / Maven build output
 target/
 *.class
 
