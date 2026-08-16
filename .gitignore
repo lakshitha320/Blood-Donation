@@ -1,19 +1,6 @@
-# Java / Maven build output
-target/
-*.class
-
-# Node
 node_modules/
-dist/
-
-# IDE
+.env
+target/
+*.jar
 .idea/
 .vscode/
-*.iml
-
-# Environment files (keep .env.example instead if you use one)
-.env
-
-# OS
-.DS_Store
-Thumbs.db
