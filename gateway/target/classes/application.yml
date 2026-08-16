@@ -26,3 +26,8 @@ gateway:
   rate-limit:
     requests-per-minute: 60
 
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/gateway
