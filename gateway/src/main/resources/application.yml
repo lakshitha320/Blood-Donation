@@ -30,4 +30,5 @@ gateway:
 spring:
   data:
     mongodb:
-      uri: mongodb://localhost:27017/gateway
+      uri: mongodb://localhost:27019/gateway
+
