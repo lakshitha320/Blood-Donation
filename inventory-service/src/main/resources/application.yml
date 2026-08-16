@@ -1,19 +1,19 @@
-server:
-  port: 8083
+﻿server:
+  port: 8082
 
 spring:
   application:
     name: inventory-service
-  data:
-    mongodb:
-      uri: ${MONGO_URI:mongodb://localhost:27017/inventory_db}
+  datasource:
+    url: jdbc:postgresql://localhost:5432/inventory_service
+    username: postgres
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
 api:
-  security:
-    key: ${API_KEY:blood_donation_secret_key_2026}
-
-springdoc:
-  api-docs:
-    path: /api-docs
-  swagger-ui:
-    path: /swagger-ui.html
+  key: "super-secret-api-key-inventory-service"
