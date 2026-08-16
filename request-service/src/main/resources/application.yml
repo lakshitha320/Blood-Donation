@@ -1,23 +1,19 @@
-server:
-  port: 8084
+﻿server:
+  port: 8083
 
 spring:
   application:
     name: request-service
-  data:
-    mongodb:
-      uri: ${MONGO_URI:mongodb://localhost:27017/request_db}
+  datasource:
+    url: jdbc:postgresql://localhost:5432/request_service
+    username: postgres
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
 api:
-  security:
-    key: ${API_KEY:blood_donation_secret_key_2026}
-
-# Base URL of the Donor Service, used to fetch donors when running the matching engine
-donor-service:
-  url: ${DONOR_SERVICE_URL:http://localhost:8082}
-
-springdoc:
-  api-docs:
-    path: /api-docs
-  swagger-ui:
-    path: /swagger-ui.html
+  key: "super-secret-api-key-request-service"
