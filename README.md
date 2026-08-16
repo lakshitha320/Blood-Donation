@@ -1,60 +1,81 @@
 # Blood Donation System (Microservices Architecture)
 
-A microservices-based Blood Donation System with an API Gateway, 5 microservices, and a unified Client Application.
+A complete, production-ready microservices-based Blood Donation System featuring an API Gateway, 5 individual Spring Boot microservices connected to MongoDB, a single-command Docker environment, a Postman collection, and a React Client Application.
 
 ---
 
-## Member Role & Branch Assignment
+## 👥 Member Role & Branch Assignment
 
-| Student ID | Name | Microservice | Branch Name | Example Endpoints | Key Responsibilities |
-|---------|------|--------------|-------------|-------------------|----------------------|
-| **ITBNM-2313-0073** | **Chanaka Sandaruwan** | **Gateway Lead - User & Auth Service** | `gateway` / `auth-service` | `/auth/register`, `/auth/login`, `/auth/profile` | User registration (donors, recipients, hospitals), OAuth 2.0, API Gateway integration, rate limiting, token issuance. |
-| **ITBNM-2313-0082** | **Chamod Vimukthi** | **Donor Service** | `donor-service` | `/donors`, `/donors/{id}`, `/donors/history` | Donor records, donation history, eligibility checks. Requires API Key authentication. |
-| **ITBNM-2313-0015** | **A.A.M Dilshara Dias** | **Blood Inventory Service** | `inventory-service` | `/inventory`, `/inventory/{bloodType}`, `/inventory/update` | Tracks available blood units by type, stock levels, updates after donations/transfusions. |
-| **ITBNM-2313-0088** | **Kaumini Sathsarani** | **Request & Matching Service** | `request-service` | `/requests`, `/requests/{id}`, `/requests/match` | Recipient requests, matches donors to recipients based on blood type and location. |
-| **ITBNM-2313-0058** | **R.G Malsha Prabodinee** | **Notification Service** | `notification-service` | `/notify/email`, `/notify/sms`, `/notify/alerts` | Sends alerts to donors and hospitals. Requires API Key authentication. |
-| **-** | **Frontend** | **Client Application** | `client-app` | React Web / Flutter Mobile App | Donor registration form, blood request submission, inventory dashboard, notifications panel. |
+| Student ID | Student Name | Role / Microservice | Branch | Port | Database | Responsibilities |
+|---|---|---|---|---|---|---|
+| **ITBNM-2313-0073** | **Chanaka Sandaruwan** | **Gateway Lead (User & Auth Service)** | `gateway` | `8080` | `gateway_db` | User registration, OAuth 2.0 JWT authentication, rate limiting, Swagger UI. |
+| **ITBNM-2313-0082** | **Chamod Vimukthi** | **Donor Service** | `donor-service` | `8081` | `donor_db` | Donor records, history, eligibility checks, API Key authentication. |
+| **ITBNM-2313-0015** | **A.A.M Dilshara Dias** | **Blood Inventory Service** | `inventory-service` | `8082` | `inventory_db` | Blood stock levels by blood type, stock updates after donation. |
+| **ITBNM-2313-0088** | **Kaumini Sathsarani** | **Request & Matching Service** | `request-service` | `8083` | `request_db` | Recipient requests, donor-recipient matching based on blood type and city. |
+| **ITBNM-2313-0058** | **R.G Malsha Prabodinee** | **Notification Service** | `notification-service` | `8084` | `notification_db` | Email & SMS alerts for blood requests and donor matches. |
+| **-** | **All Members** | **React Client Frontend** | `client-app` | `5173` | - | Unified Dark-themed Glassmorphism UI connected to Gateway. |
 
 ---
 
-## Repository Folder Structure
+## 📁 Repository Folder Structure
 
-```
+```text
 /
-├── gateway/              # User & Auth Service (Spring Cloud Gateway / OAuth 2.0)
-├── donor-service/        # Donor Management Microservice
-├── inventory-service/    # Blood Inventory Microservice
-├── request-service/      # Request & Matching Microservice
-├── notification-service/ # Notification Microservice
-├── client-app/           # React / Flutter Client Frontend
-├── docker-compose.yml    # Root Docker Orchestration
-└── README.md             # Project Documentation
+├── gateway/                       # User & Auth Service (Port 8080)
+├── donor-service/                 # Donor Service (Port 8081)
+├── inventory-service/             # Blood Inventory Service (Port 8082)
+├── request-service/               # Request & Matching Service (Port 8083)
+├── notification-service/          # Notification Service (Port 8084)
+├── client-app/                    # React + Vite Frontend (Port 5173)
+├── docker-compose.yml             # Single-command Docker Orchestration
+├── Blood_Donation_Postman_Collection.json # Importable Postman Collection
+└── README.md                      # Complete Project Documentation
 ```
 
-Each microservice folder must contain:
-- `src/` - Source code
-- `Dockerfile` - Docker container definition with exposed ports
-- `application.yml` - Spring Boot configuration
+---
+
+## 🚀 How to Run the Project
+
+### Option 1: Using Docker Compose (Recommended)
+Run the entire ecosystem (MongoDB + 5 Microservices + React App) with one command:
+
+```bash
+docker compose up --build
+```
+
+### Option 2: Running Locally (Without Docker)
+1. **Database:** Start local MongoDB instance on `mongodb://localhost:27017`.
+2. **Frontend:** Navigate to `client-app` and run:
+   ```bash
+   npm install
+   npm run dev
+   ```
+3. **Backend Services:** Open any microservice folder and run:
+   ```bash
+   mvn spring-boot:run
+   ```
 
 ---
 
-##  Security & Infrastructure Setup
+## 📮 Postman API Collection
 
-- **API Gateway**: All requests routed through gateway with OAuth 2.0. Rate limiting per IP/client. CORS configured for client app.
-- **Microservices**: API Key authentication enforced. Direct unauthorized calls rejected.
-- **Swagger UI**: Available at `http://localhost:808X/swagger-ui.html` for each service.
-- **Database**: PostgreSQL with separate databases per service (`donor_db`, `inventory_db`, etc.) or separate schemas.
+Import the included `Blood_Donation_Postman_Collection.json` into Postman to test all endpoints.
+
+| Service | Sample Endpoint | Auth Header Required |
+|---|---|---|
+| Gateway | `POST /auth/register` | None |
+| Gateway | `POST /auth/login` | None |
+| Gateway | `GET /auth/profile` | `Authorization: Bearer <JWT_TOKEN>` |
+| Donor Service | `GET /donors` | `X-API-KEY: super-secret-api-key-donor-service` |
+| Inventory Service | `GET /inventory` | `X-API-KEY: super-secret-api-key-inventory-service` |
+| Request Service | `GET /requests` | `X-API-KEY: super-secret-api-key-request-service` |
+| Notification Service | `POST /notify/email` | `X-API-KEY: super-secret-api-key-notification-service` |
 
 ---
 
-##  Git Branching Strategy
+## 🔒 Security & Architecture Setup
 
-- `main` - Production-ready code
-- `develop` - Integration branch
-- Service branches for individual contributions:
-  - `gateway`
-  - `donor-service`
-  - `inventory-service`
-  - `request-service`
-  - `notification-service`
-  - `client-app`
+- **OAuth 2.0 & JWT:** Enforced at the API Gateway level (`gateway`).
+- **API Key Security:** Enforced across all downstream microservices.
+- **CORS:** Configured for cross-origin client app communication.
+- **Rate Limiting:** Prevents API abuse at Gateway level.
