@@ -1,0 +1,40 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot - API Gateway",
+      "request": "launch",
+      "mainClass": "com.blooddonation.gateway.GatewayServiceApplication",
+      "projectName": "gateway-service"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot - Donor Service",
+      "request": "launch",
+      "mainClass": "com.blooddonation.donor.DonorServiceApplication",
+      "projectName": "donor-service"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot - Inventory Service",
+      "request": "launch",
+      "mainClass": "com.blooddonation.inventory.InventoryServiceApplication",
+      "projectName": "inventory-service"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot - Request Service",
+      "request": "launch",
+      "mainClass": "com.blooddonation.request.RequestServiceApplication",
+      "projectName": "request-service"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot - Notification Service",
+      "request": "launch",
+      "mainClass": "com.blooddonation.notification.NotificationServiceApplication",
+      "projectName": "notification-service"
+    }
+  ]
+}

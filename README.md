@@ -20,16 +20,19 @@ A complete, production-ready microservices-based Blood Donation System featuring
 ## 📁 Repository Folder Structure
 
 ```text
-/
-├── gateway/                       # User & Auth Service (Port 8080)
-├── donor-service/                 # Donor Service (Port 8081)
-├── inventory-service/             # Blood Inventory Service (Port 8082)
-├── request-service/               # Request & Matching Service (Port 8083)
-├── notification-service/          # Notification Service (Port 8084)
-├── client-app/                    # React + Vite Frontend (Port 5173)
-├── docker-compose.yml             # Single-command Docker Orchestration
-├── Blood_Donation_Postman_Collection.json # Importable Postman Collection
-└── README.md                      # Complete Project Documentation
+BLOOD-DONATION /
+├── 📁 .github/                    # CI/CD Workflows
+├── 📁 .vscode/                    # VS Code Settings & Debug Configurations
+├── 📁 api-gateway/                # User & Auth Service / Gateway (Port 8080)
+├── 📁 donor-service/              # Donor Service (Port 8081)
+├── 📁 inventory-service/          # Blood Inventory Service (Port 8082)
+├── 📁 request-service/            # Request & Matching Service (Port 8083)
+├── 📁 notification-service/       # Notification Service (Port 8084)
+├── 📁 frontend/                   # React + Vite Frontend (Port 5173)
+├── 📄 docker-compose.yml          # Single-command Multi-Container Orchestration
+├── 📄 Blood_Donation_Postman_Collection.json # Importable Postman Collection
+├── 📄 start_system.ps1            # One-click startup script
+└── 📄 README.md                   # Complete Project Documentation
 ```
 
 ---
@@ -45,12 +48,12 @@ docker compose up --build
 
 ### Option 2: Running Locally (Without Docker)
 1. **Database:** Start local MongoDB instance on `mongodb://localhost:27017`.
-2. **Frontend:** Navigate to `client-app` and run:
+2. **Frontend:** Navigate to `frontend` and run:
    ```bash
    npm install
    npm run dev
    ```
-3. **Backend Services:** Open any microservice folder and run:
+3. **Backend Services:** Open any microservice folder (e.g. `api-gateway`) and run:
    ```bash
    mvn spring-boot:run
    ```

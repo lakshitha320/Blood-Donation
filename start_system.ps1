@@ -7,8 +7,8 @@ Write-Host "=========================================================" -Foregrou
 
 # 1. Start Frontend
 Write-Host "[1/2] Starting React Frontend Web Application..." -ForegroundColor Cyan
-$clientDir = Join-Path $repoDir "client-app"
-Start-Process powershell -ArgumentList "-NoExit", "-Command", "Set-Location '$clientDir'; npm run dev" -WindowStyle Normal
+$frontendDir = Join-Path $repoDir "frontend"
+Start-Process powershell -ArgumentList "-NoExit", "-Command", "Set-Location '$frontendDir'; npm run dev" -WindowStyle Normal
 
 # 2. Wait and Open Browser
 Write-Host "[2/2] Opening Application Dashboard..." -ForegroundColor Green
