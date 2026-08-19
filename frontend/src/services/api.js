@@ -87,8 +87,10 @@ export const apiAuth = {
       method: 'POST',
       body: JSON.stringify(credentials),
     });
-    if (data) return data;
-    // Mock login fallback
+    if (data && data.token) {
+      setGatewayConfig({ token: data.token });
+      return data;
+    }
     const mockToken = 'mock_jwt_token_' + Math.random().toString(36).substring(7);
     setGatewayConfig({ token: mockToken });
     return { token: mockToken, user: { email: credentials.email, role: 'DONOR' } };
@@ -109,7 +111,16 @@ export const apiAuth = {
 // 2. Donor Service Endpoints (/donors)
 export const apiDonors = {
   getAll: async () => {
-    return await fetchFromGateway('/donors') || initialDonors;
+    const data = await fetchFromGateway('/donors');
+    if (data && Array.isArray(data) && data.length > 0) {
+      return data.map(d => ({
+        ...d,
+        city: d.location || d.city || 'Colombo',
+        eligible: d.eligibilityStatus === 'ELIGIBLE' || d.eligible === true,
+        totalDonations: d.totalDonations || 1
+      }));
+    }
+    return initialDonors;
   },
   getById: async (id) => {
     return await fetchFromGateway(`/donors/${id}`) || initialDonors.find(d => d.id === id);
@@ -121,47 +132,84 @@ export const apiDonors = {
     ];
   },
   create: async (donor) => {
+    const payload = {
+      name: donor.name,
+      email: donor.email,
+      phone: donor.phone,
+      bloodType: donor.bloodType,
+      location: donor.city || donor.location || 'Colombo',
+      eligibilityStatus: donor.eligible !== false ? 'ELIGIBLE' : 'INELIGIBLE'
+    };
     const data = await fetchFromGateway('/donors', {
       method: 'POST',
-      body: JSON.stringify(donor),
+      body: JSON.stringify(payload),
     });
-    return data || { ...donor, id: `DON-${Math.floor(100 + Math.random() * 900)}` };
+    if (data) {
+      return {
+        ...data,
+        city: data.location || data.city || 'Colombo',
+        eligible: data.eligibilityStatus === 'ELIGIBLE' || data.eligible === true,
+        totalDonations: donor.totalDonations || 1
+      };
+    }
+    return { ...donor, id: `DON-${Math.floor(100 + Math.random() * 900)}` };
   }
 };
 
 // 3. Inventory Service Endpoints (/inventory)
 export const apiInventory = {
   getAll: async () => {
-    return await fetchFromGateway('/inventory') || initialInventory;
+    const data = await fetchFromGateway('/inventory');
+    if (data && Array.isArray(data) && data.length > 0) {
+      return data;
+    }
+    return initialInventory;
   },
   getByBloodType: async (bloodType) => {
     return await fetchFromGateway(`/inventory/${encodeURIComponent(bloodType)}`) || initialInventory.find(i => i.bloodType === bloodType);
   },
   updateStock: async (updateData) => {
+    const payload = {
+      bloodType: updateData.bloodType,
+      amount: parseInt(updateData.amount, 10),
+      timestamp: new Date().toISOString()
+    };
     const data = await fetchFromGateway('/inventory/update', {
       method: 'POST',
-      body: JSON.stringify(updateData),
+      body: JSON.stringify(payload),
     });
-    return data || { success: true, message: `Stock for ${updateData.bloodType} updated by ${updateData.amount} units.` };
+    return data || { success: true, message: `Stock for ${updateData.bloodType} updated.` };
   }
 };
 
 // 4. Request & Matching Service Endpoints (/requests)
 export const apiRequests = {
   getAll: async () => {
-    return await fetchFromGateway('/requests') || initialRequests;
+    const data = await fetchFromGateway('/requests');
+    if (data && Array.isArray(data) && data.length > 0) {
+      return data;
+    }
+    return initialRequests;
   },
   create: async (requestData) => {
+    const payload = {
+      recipientName: requestData.recipientName,
+      bloodType: requestData.bloodType,
+      units: parseInt(requestData.units, 10) || 1,
+      urgency: requestData.urgency || 'NORMAL',
+      hospital: requestData.hospital || 'General Hospital',
+      city: requestData.city || 'Colombo',
+      contact: requestData.contact || '+94 77 123 4567'
+    };
     const data = await fetchFromGateway('/requests', {
       method: 'POST',
-      body: JSON.stringify(requestData),
+      body: JSON.stringify(payload),
     });
     return data || { ...requestData, id: `REQ-${Math.floor(500 + Math.random() * 400)}`, status: 'PENDING', createdAt: new Date().toISOString().replace('T', ' ').substring(0, 16) };
   },
   matchDonors: async (requestId) => {
     const data = await fetchFromGateway(`/requests/match?requestId=${requestId}`);
     if (data) return data;
-    // Mock matching logic
     return initialDonors.filter(d => d.eligible);
   }
 };
@@ -169,18 +217,39 @@ export const apiRequests = {
 // 5. Notification Service Endpoints (/notify)
 export const apiNotifications = {
   getAll: async () => {
-    return await fetchFromGateway('/notify/alerts') || initialNotifications;
+    const data = await fetchFromGateway('/notify/alerts');
+    if (data && Array.isArray(data) && data.length > 0) {
+      return data.map(n => ({
+        id: n.id || `NOTIF-${Math.floor(10 + Math.random() * 90)}`,
+        type: n.type || 'SYSTEM',
+        title: n.subject || 'System Notification',
+        message: n.message,
+        recipient: n.recipientContact || 'System Admin',
+        time: n.sentAt || 'Just now',
+        status: n.status || 'SENT'
+      }));
+    }
+    return initialNotifications;
   },
   sendEmail: async (emailPayload) => {
+    const payload = {
+      recipientEmail: emailPayload.to || emailPayload.recipientEmail,
+      subject: emailPayload.subject || 'Blood Donation Alert',
+      message: emailPayload.message
+    };
     return await fetchFromGateway('/notify/email', {
       method: 'POST',
-      body: JSON.stringify(emailPayload),
-    }) || { success: true, message: `Email sent to ${emailPayload.to}` };
+      body: JSON.stringify(payload),
+    }) || { success: true, message: `Email sent to ${payload.recipientEmail}` };
   },
   sendSms: async (smsPayload) => {
+    const payload = {
+      recipientPhone: smsPayload.phone || smsPayload.recipientPhone,
+      message: smsPayload.message
+    };
     return await fetchFromGateway('/notify/sms', {
       method: 'POST',
-      body: JSON.stringify(smsPayload),
-    }) || { success: true, message: `SMS alert dispatched to ${smsPayload.phone}` };
+      body: JSON.stringify(payload),
+    }) || { success: true, message: `SMS alert dispatched to ${payload.recipientPhone}` };
   }
 };
