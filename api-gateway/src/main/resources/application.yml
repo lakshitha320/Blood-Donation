@@ -1,4 +1,4 @@
-﻿server:
+server:
   port: 8080
 
 spring:
@@ -25,3 +25,13 @@ gateway:
     api-key-secret: blood_donation_secret_key_2026
   rate-limit:
     requests-per-minute: 60
+
+services:
+  donor:
+    url: ${DONOR_SERVICE_URL:http://localhost:8081}
+  inventory:
+    url: ${INVENTORY_SERVICE_URL:http://localhost:8082}
+  request:
+    url: ${REQUEST_SERVICE_URL:http://localhost:8083}
+  notification:
+    url: ${NOTIFICATION_SERVICE_URL:http://localhost:8084}
