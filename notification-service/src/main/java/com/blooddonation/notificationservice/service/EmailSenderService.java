@@ -28,12 +28,12 @@ public class EmailSenderService {
     private String fromAddress;
 
     @Autowired
-    public EmailSenderService(JavaMailSender mailSender) {
+    public EmailSenderService(@Autowired(required = false) JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
 
     public void send(String toEmail, String subject, String body) {
-        if (mockMode || fromAddress == null || fromAddress.isBlank()) {
+        if (mockMode || fromAddress == null || fromAddress.isBlank() || mailSender == null) {
             log.info("[MOCK EMAIL] to={} subject='{}' body='{}'", toEmail, subject, body);
             return;
         }
