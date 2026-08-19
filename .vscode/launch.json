@@ -12,28 +12,28 @@
       "type": "java",
       "name": "Spring Boot - Donor Service",
       "request": "launch",
-      "mainClass": "com.blooddonation.donor.DonorServiceApplication",
+      "mainClass": "com.blooddonation.donorservice.DonorServiceApplication",
       "projectName": "donor-service"
     },
     {
       "type": "java",
       "name": "Spring Boot - Inventory Service",
       "request": "launch",
-      "mainClass": "com.blooddonation.inventory.InventoryServiceApplication",
+      "mainClass": "com.blooddonation.inventoryservice.InventoryServiceApplication",
       "projectName": "inventory-service"
     },
     {
       "type": "java",
       "name": "Spring Boot - Request Service",
       "request": "launch",
-      "mainClass": "com.blooddonation.request.RequestServiceApplication",
+      "mainClass": "com.blooddonation.requestservice.RequestServiceApplication",
       "projectName": "request-service"
     },
     {
       "type": "java",
       "name": "Spring Boot - Notification Service",
       "request": "launch",
-      "mainClass": "com.blooddonation.notification.NotificationServiceApplication",
+      "mainClass": "com.blooddonation.notificationservice.NotificationServiceApplication",
       "projectName": "notification-service"
     }
   ]
