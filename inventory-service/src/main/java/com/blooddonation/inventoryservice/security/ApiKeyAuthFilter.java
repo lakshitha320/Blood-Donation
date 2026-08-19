@@ -15,7 +15,7 @@ public class ApiKeyAuthFilter extends OncePerRequestFilter {
 
     private static final String API_KEY_HEADER = "X-API-KEY";
 
-    @Value("${api.security.key}")
+    @Value("${api.security.key:blood_donation_secret_key_2026}")
     private String apiKey;
 
     @Override

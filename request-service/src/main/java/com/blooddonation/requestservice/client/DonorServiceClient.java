@@ -27,10 +27,10 @@ public class DonorServiceClient {
 
     private final RestTemplate restTemplate;
 
-    @Value("${donor-service.url}")
+    @Value("${donor-service.url:http://localhost:8081}")
     private String donorServiceUrl;
 
-    @Value("${api.security.key}")
+    @Value("${api.security.key:blood_donation_secret_key_2026}")
     private String apiKey;
 
     public DonorServiceClient(RestTemplate restTemplate) {

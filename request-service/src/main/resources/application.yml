@@ -1,4 +1,4 @@
-﻿server:
+server:
   port: 8083
 
 spring:
@@ -9,4 +9,9 @@ spring:
       uri: mongodb://localhost:27017/request_service
 
 api:
-  key: "super-secret-api-key-request-service"
+  key: ${API_SECURITY_KEY:blood_donation_secret_key_2026}
+  security:
+    key: ${API_SECURITY_KEY:blood_donation_secret_key_2026}
+
+donor-service:
+  url: ${DONOR_SERVICE_URL:http://localhost:8081}

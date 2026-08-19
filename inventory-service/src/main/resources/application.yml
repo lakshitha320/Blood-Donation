@@ -1,4 +1,4 @@
-﻿server:
+server:
   port: 8082
 
 spring:
@@ -9,4 +9,6 @@ spring:
       uri: mongodb://localhost:27017/inventory_service
 
 api:
-  key: "super-secret-api-key-inventory-service"
+  key: ${API_SECURITY_KEY:blood_donation_secret_key_2026}
+  security:
+    key: ${API_SECURITY_KEY:blood_donation_secret_key_2026}
