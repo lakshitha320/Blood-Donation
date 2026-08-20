@@ -60,25 +60,63 @@ docker compose up --build
 
 ---
 
+---
+
+## 📖 Interactive Swagger UI & OpenAPI Documentation
+
+Every microservice in this ecosystem exposes an interactive **OpenAPI 3 / Swagger UI** console. You can test endpoints, view JSON schemas, and simulate requests directly from your browser.
+
+| Microservice | Port | Interactive Swagger UI URL | OpenAPI 3 JSON Spec |
+|---|---|---|---|
+| 🛡️ **API Gateway (Main Entry & Reverse Proxy)** | `8080` | [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html) | [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs) |
+| 🩸 **Donor Service** | `8081` | [http://localhost:8081/swagger-ui.html](http://localhost:8081/swagger-ui.html) | [http://localhost:8081/v3/api-docs](http://localhost:8081/v3/api-docs) |
+| 📦 **Blood Inventory Service** | `8082` | [http://localhost:8082/swagger-ui.html](http://localhost:8082/swagger-ui.html) | [http://localhost:8082/v3/api-docs](http://localhost:8082/v3/api-docs) |
+| 📋 **Request & Matching Service** | `8083` | [http://localhost:8083/swagger-ui.html](http://localhost:8083/swagger-ui.html) | [http://localhost:8083/v3/api-docs](http://localhost:8083/v3/api-docs) |
+| 🔔 **Notification Service** | `8084` | [http://localhost:8084/swagger-ui.html](http://localhost:8084/swagger-ui.html) | [http://localhost:8084/v3/api-docs](http://localhost:8084/v3/api-docs) |
+
+### 🔑 How to Authorize in Swagger UI:
+1. Open any Swagger UI link above (e.g. `http://localhost:8080/swagger-ui.html`).
+2. Click the green **`Authorize` 🔓** button in the top-right corner.
+3. For **`ApiKey` / `X-API-KEY`**, enter:
+   ```text
+   blood_donation_secret_key_2026
+   ```
+4. Click **`Authorize`** and then **`Close`**.
+5. Choose any endpoint, click **`Try it out`**, fill any required request body, and click **`Execute`**!
+
+---
+
 ## 📮 Postman API Collection
 
-Import the included `Blood_Donation_Postman_Collection.json` into Postman to test all endpoints.
+Import the included `Blood_Donation_Postman_Collection.json` into Postman (or use 1-click URL import with `http://localhost:8080/v3/api-docs`) to test all endpoints.
 
 | Service | Sample Endpoint | Auth Header Required |
 |---|---|---|
-| Gateway | `POST /auth/register` | None |
-| Gateway | `POST /auth/login` | None |
+| Gateway | `POST /auth/register` | `X-API-KEY: blood_donation_secret_key_2026` |
+| Gateway | `POST /auth/login` | `X-API-KEY: blood_donation_secret_key_2026` |
 | Gateway | `GET /auth/profile` | `Authorization: Bearer <JWT_TOKEN>` |
-| Donor Service | `GET /donors` | `X-API-KEY: super-secret-api-key-donor-service` |
-| Inventory Service | `GET /inventory` | `X-API-KEY: super-secret-api-key-inventory-service` |
-| Request Service | `GET /requests` | `X-API-KEY: super-secret-api-key-request-service` |
-| Notification Service | `POST /notify/email` | `X-API-KEY: super-secret-api-key-notification-service` |
+| Gateway | `GET /auth/logs` | `X-API-KEY: blood_donation_secret_key_2026` |
+| Donor Service | `GET /donors` | `X-API-KEY: blood_donation_secret_key_2026` |
+| Inventory Service | `GET /inventory` | `X-API-KEY: blood_donation_secret_key_2026` |
+| Request Service | `GET /requests` | `X-API-KEY: blood_donation_secret_key_2026` |
+| Notification Service | `POST /notify/email` | `X-API-KEY: blood_donation_secret_key_2026` |
+
+---
+
+## 🔑 Default Credentials & Database Connection
+
+- **Donor Account:** `donor@blood.lk` | Password: `password123`
+- **Hospital Account:** `hospital@colombo.lk` | Password: `hospital123`
+- **Internal Security API Key:** `blood_donation_secret_key_2026`
+- **MongoDB Compass Connection:** `mongodb://localhost:27018`
 
 ---
 
 ## 🔒 Security & Architecture Setup
 
-- **OAuth 2.0 & JWT:** Enforced at the API Gateway level (`gateway`).
-- **API Key Security:** Enforced across all downstream microservices.
-- **CORS:** Configured for cross-origin client app communication.
-- **Rate Limiting:** Prevents API abuse at Gateway level.
+- **Database-per-Service:** Each microservice operates on its own dedicated MongoDB database (`gateway_db`, `donor_db`, `inventory_db`, `request_db`, `notification_db`).
+- **OAuth 2.0 & JWT:** Enforced at the API Gateway level with audit logging.
+- **Service-to-Service Security:** `X-API-KEY` internal secret enforced on all microservices.
+- **CORS:** Configured for cross-origin client app communication on port `5173`.
+- **Rate Limiting:** Prevents API abuse at Gateway level (60 req/min).
+
