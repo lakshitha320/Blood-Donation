@@ -88,4 +88,10 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("valid", false, "message", "Invalid token"));
         }
     }
+
+    @GetMapping("/logs")
+    @Operation(summary = "Get User Login & Activity Audit Logs", description = "Returns all user login and registration audit logs stored in MongoDB gateway_db.login_logs.")
+    public ResponseEntity<?> getLogs() {
+        return ResponseEntity.ok(authService.getLoginLogs());
+    }
 }

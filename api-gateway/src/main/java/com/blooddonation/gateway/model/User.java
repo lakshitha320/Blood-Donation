@@ -16,6 +16,7 @@ public class User {
     private String phone;
     private UserRole role;
     private LocalDateTime createdAt;
+    private LocalDateTime lastLogin;
 
     public User() {}
 
@@ -29,6 +30,7 @@ public class User {
         this.phone = phone;
         this.role = role;
         this.createdAt = LocalDateTime.now();
+        this.lastLogin = LocalDateTime.now();
     }
 
     public String getId() { return id; }
@@ -57,4 +59,7 @@ public class User {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    public LocalDateTime getLastLogin() { return lastLogin; }
+    public void setLastLogin(LocalDateTime lastLogin) { this.lastLogin = lastLogin; }
 }

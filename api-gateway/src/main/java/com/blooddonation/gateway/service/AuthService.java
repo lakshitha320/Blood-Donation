@@ -4,25 +4,31 @@ import com.blooddonation.gateway.dto.AuthResponse;
 import com.blooddonation.gateway.dto.LoginRequest;
 import com.blooddonation.gateway.dto.RegisterRequest;
 import com.blooddonation.gateway.dto.UserProfileResponse;
+import com.blooddonation.gateway.model.LoginLog;
 import com.blooddonation.gateway.model.User;
 import com.blooddonation.gateway.model.UserRole;
+import com.blooddonation.gateway.repository.LoginLogRepository;
 import com.blooddonation.gateway.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final LoginLogRepository loginLogRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
-    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
+    public AuthService(UserRepository userRepository, LoginLogRepository loginLogRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.userRepository = userRepository;
+        this.loginLogRepository = loginLogRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
     }
@@ -42,6 +48,7 @@ public class AuthService {
                     UserRole.DONOR
                 );
                 userRepository.save(donor);
+                loginLogRepository.save(new LoginLog(donor.getId(), donor.getEmail(), donor.getRole(), "SYSTEM_SEED"));
             }
 
             if (!userRepository.existsByEmail("hospital@colombo.lk")) {
@@ -56,6 +63,7 @@ public class AuthService {
                     UserRole.HOSPITAL
                 );
                 userRepository.save(hospital);
+                loginLogRepository.save(new LoginLog(hospital.getId(), hospital.getEmail(), hospital.getRole(), "SYSTEM_SEED"));
             }
         };
     }
@@ -80,6 +88,7 @@ public class AuthService {
         );
 
         userRepository.save(newUser);
+        loginLogRepository.save(new LoginLog(newUser.getId(), newUser.getEmail(), newUser.getRole(), "REGISTER"));
 
         String jwtToken = jwtService.generateToken(newUser.getId(), newUser.getEmail(), newUser.getRole());
         return new AuthResponse(jwtToken, newUser.getId(), newUser.getEmail(), newUser.getRole());
@@ -93,6 +102,11 @@ public class AuthService {
             throw new IllegalArgumentException("Invalid email or password!");
         }
 
+        user.setLastLogin(LocalDateTime.now());
+        userRepository.save(user);
+
+        loginLogRepository.save(new LoginLog(user.getId(), user.getEmail(), user.getRole(), "LOGIN_SUCCESS"));
+
         String jwtToken = jwtService.generateToken(user.getId(), user.getEmail(), user.getRole());
         return new AuthResponse(jwtToken, user.getId(), user.getEmail(), user.getRole());
     }
@@ -101,5 +115,9 @@ public class AuthService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("User not found!"));
         return new UserProfileResponse(user);
+    }
+
+    public List<LoginLog> getLoginLogs() {
+        return loginLogRepository.findAllByOrderByTimestampDesc();
     }
 }
