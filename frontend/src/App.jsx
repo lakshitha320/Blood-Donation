@@ -139,39 +139,64 @@ export default function App() {
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
-            <div style={{ background: 'var(--bg-surface)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
-              <h4 style={{ color: 'var(--color-brand-primary)', marginBottom: '0.5rem' }}>1. User & Auth Service</h4>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}><strong>Assigned:</strong> Gateway Lead (Student 1)</p>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}><strong>Endpoints:</strong> `/auth/register`, `/auth/login`, `/auth/profile`</p>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-dim)', marginTop: '0.5rem' }}>Handles OAuth 2.0, API Gateway integration, rate limiting, and token issuance.</p>
+            <div style={{ background: 'var(--bg-surface)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div>
+                <h4 style={{ color: 'var(--color-brand-primary)', marginBottom: '0.5rem' }}>1. User & Auth Service / Gateway</h4>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}><strong>Port:</strong> `8080` | <strong>DB:</strong> `gateway_db`</p>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}><strong>Endpoints:</strong> `/auth/register`, `/auth/login`, `/auth/logs`</p>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-dim)', marginTop: '0.5rem' }}>Handles OAuth 2.0, API Gateway integration, rate limiting, and token issuance.</p>
+              </div>
+              <a href="http://localhost:8080/swagger-ui.html" target="_blank" rel="noreferrer" className="btn btn-secondary" style={{ marginTop: '1rem', width: 'fit-content', padding: '0.4rem 0.8rem', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <ExternalLink size={14} /> Open Gateway Swagger
+              </a>
             </div>
 
-            <div style={{ background: 'var(--bg-surface)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
-              <h4 style={{ color: 'var(--color-brand-primary)', marginBottom: '0.5rem' }}>2. Donor Service</h4>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}><strong>Assigned:</strong> Member (Student 2)</p>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}><strong>Endpoints:</strong> `/donors`, `/donors/{id}`, `/donors/history`</p>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-dim)', marginTop: '0.5rem' }}>Manages donor records, donation history, and eligibility checks with API Key security.</p>
+            <div style={{ background: 'var(--bg-surface)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div>
+                <h4 style={{ color: 'var(--color-brand-primary)', marginBottom: '0.5rem' }}>2. Donor Service</h4>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}><strong>Port:</strong> `8081` | <strong>DB:</strong> `donor_db`</p>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}><strong>Endpoints:</strong> `/donors`, `/donors/{id}`, `/donors/history`</p>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-dim)', marginTop: '0.5rem' }}>Manages donor records, donation history, and eligibility checks with API Key security.</p>
+              </div>
+              <a href="http://localhost:8081/swagger-ui.html" target="_blank" rel="noreferrer" className="btn btn-secondary" style={{ marginTop: '1rem', width: 'fit-content', padding: '0.4rem 0.8rem', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <ExternalLink size={14} /> Open Donor Swagger
+              </a>
             </div>
 
-            <div style={{ background: 'var(--bg-surface)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
-              <h4 style={{ color: 'var(--color-brand-primary)', marginBottom: '0.5rem' }}>3. Blood Inventory Service</h4>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}><strong>Assigned:</strong> Member (Student 3)</p>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}><strong>Endpoints:</strong> `/inventory`, `/inventory/{bloodType}`, `/inventory/update`</p>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-dim)', marginTop: '0.5rem' }}>Tracks available blood units by type, stock levels, and transfusion updates.</p>
+            <div style={{ background: 'var(--bg-surface)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div>
+                <h4 style={{ color: 'var(--color-brand-primary)', marginBottom: '0.5rem' }}>3. Blood Inventory Service</h4>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}><strong>Port:</strong> `8082` | <strong>DB:</strong> `inventory_db`</p>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}><strong>Endpoints:</strong> `/inventory`, `/inventory/{bloodType}`, `/inventory/update`</p>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-dim)', marginTop: '0.5rem' }}>Tracks available blood units by type, stock levels, and transfusion updates.</p>
+              </div>
+              <a href="http://localhost:8082/swagger-ui.html" target="_blank" rel="noreferrer" className="btn btn-secondary" style={{ marginTop: '1rem', width: 'fit-content', padding: '0.4rem 0.8rem', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <ExternalLink size={14} /> Open Inventory Swagger
+              </a>
             </div>
 
-            <div style={{ background: 'var(--bg-surface)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
-              <h4 style={{ color: 'var(--color-brand-primary)', marginBottom: '0.5rem' }}>4. Request & Matching Service</h4>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}><strong>Assigned:</strong> Member (Student 4)</p>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}><strong>Endpoints:</strong> `/requests`, `/requests/{id}`, `/requests/match`</p>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-dim)', marginTop: '0.5rem' }}>Handles recipient requests, matching donors to recipients based on blood type & location.</p>
+            <div style={{ background: 'var(--bg-surface)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div>
+                <h4 style={{ color: 'var(--color-brand-primary)', marginBottom: '0.5rem' }}>4. Request & Matching Service</h4>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}><strong>Port:</strong> `8083` | <strong>DB:</strong> `request_db`</p>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}><strong>Endpoints:</strong> `/requests`, `/requests/{id}`, `/requests/match`</p>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-dim)', marginTop: '0.5rem' }}>Handles recipient requests, matching donors to recipients based on blood type & location.</p>
+              </div>
+              <a href="http://localhost:8083/swagger-ui.html" target="_blank" rel="noreferrer" className="btn btn-secondary" style={{ marginTop: '1rem', width: 'fit-content', padding: '0.4rem 0.8rem', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <ExternalLink size={14} /> Open Request Swagger
+              </a>
             </div>
 
-            <div style={{ background: 'var(--bg-surface)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
-              <h4 style={{ color: 'var(--color-brand-primary)', marginBottom: '0.5rem' }}>5. Notification Service</h4>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}><strong>Assigned:</strong> Member (Student 5)</p>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}><strong>Endpoints:</strong> `/notify/email`, `/notify/sms`, `/notify/alerts`</p>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-dim)', marginTop: '0.5rem' }}>Sends urgent alerts to donors and hospitals. Enforces API Key authentication.</p>
+            <div style={{ background: 'var(--bg-surface)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div>
+                <h4 style={{ color: 'var(--color-brand-primary)', marginBottom: '0.5rem' }}>5. Notification Service</h4>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}><strong>Port:</strong> `8084` | <strong>DB:</strong> `notification_db`</p>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}><strong>Endpoints:</strong> `/notify/email`, `/notify/sms`, `/notify/alerts`</p>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-dim)', marginTop: '0.5rem' }}>Sends urgent alerts to donors and hospitals. Enforces API Key authentication.</p>
+              </div>
+              <a href="http://localhost:8084/swagger-ui.html" target="_blank" rel="noreferrer" className="btn btn-secondary" style={{ marginTop: '1rem', width: 'fit-content', padding: '0.4rem 0.8rem', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <ExternalLink size={14} /> Open Notification Swagger
+              </a>
             </div>
           </div>
         </div>
